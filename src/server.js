@@ -12,4 +12,26 @@ app.use(json())
 app.use(urlencoded({ extended: true }))
 app.use(morgan('dev'))
 
-export const start = () => {}
+app.get('/', (req, res) => {
+  res.send({ message: 'hello' })
+})
+
+app.post('/', (req, res) => {
+  console.log(req.body)
+  res.send({ message: 'ok' })
+})
+
+app.post('/greet', (req, res) => {
+  console.log(req.body)
+  if (req.body.name) {
+    res.send({ message: 'hi ' + req.body.name })
+  } else {
+    res.send({ message: 'tell me your name pls!' })
+  }
+})
+
+export const start = () => {
+  app.listen(3000, () => {
+    console.log('server is running on 3000')
+  })
+}
