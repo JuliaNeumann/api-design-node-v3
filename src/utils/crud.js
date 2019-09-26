@@ -1,4 +1,15 @@
-export const getOne = model => async (req, res) => {}
+export const getOne = model => async (req, res) => {
+  return model.findOne({_id: req.params.id, createdBy: req.user._id})
+    .then((doc) => {
+      if (doc) {
+        res.status(200);
+        res.json({data: doc});
+      } else {
+        res.status(400);
+        res.end();
+      }
+    });
+}
 
 export const getMany = model => async (req, res) => {}
 
