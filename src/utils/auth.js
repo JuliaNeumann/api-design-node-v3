@@ -16,9 +16,20 @@ export const verifyToken = token =>
     })
   })
 
-export const signup = async (req, res) => {}
+export const signup = async (req, res) => {
+  if (!req.body.email || !req.body.password) {
+    res.status(400).send({ message: 'No email or password provided' })
+  } else {
+    const user = await User.create({
+      password: req.body.password,
+      email: req.body.email
+    })
+    const token = newToken(user)
+    res.status(201).send({ token })
+  }
+}
 
-export const signin = async (req, res) => {}
+export const signin = async (req, res) => { }
 
 export const protect = async (req, res, next) => {
   next()
