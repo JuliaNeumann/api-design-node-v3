@@ -18,18 +18,32 @@ export const verifyToken = token =>
 
 export const signup = async (req, res) => {
   if (!req.body.email || !req.body.password) {
-    res.status(400).send({ message: 'No email or password provided' })
+    return res.status(400).send({ message: 'No email or password provided' })
   } else {
-    const user = await User.create({
-      password: req.body.password,
-      email: req.body.email
-    })
-    const token = newToken(user)
-    res.status(201).send({ token })
+    try {
+      const user = await User.create({
+        password: req.body.password,
+        email: req.body.email
+      })
+      const token = newToken(user)
+      return res.status(201).send({ token })
+    } catch (e) {
+      console.error(e)
+      return res.status(400).end()
+    }
   }
 }
 
-export const signin = async (req, res) => { }
+export const signin = async (req, res) => {
+  if (!req.body.email || !req.body.password) {
+    return res.status(400).send({ message: 'No email or password provided' })
+  } else {
+    const user = await User.findOne(req.body).exec()
+    if (!user) {
+      return res.status(401).send({ message: 'No user found' })
+    }
+  }
+}
 
 export const protect = async (req, res, next) => {
   next()
